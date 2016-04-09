@@ -1,4 +1,4 @@
-FROM centos-systemd
+FROM centos:7
 
 MAINTAINER Dan Skadra <dskadra@gmail.com>
 
