@@ -12,10 +12,10 @@ ARG PUPPETAGENT_VERSION
 # ARG PUPPETAGENT_VERSION="1.2.*"
 # ARG PUPPETAGENT_VERSION="1.2.6"
 
-## Persist variables into child images
-ENV BOOTSTRAPENV=bootstrap_sysd \
-    PUPPETSERVER=$PUPPETSERVER \
-    WAITFORCERT=$WAITFORCERT \
+# Persist variables into child images
+ENV PUPPETENV=production \
+    PUPPETSERVER=puppet \
+    WAITFORCERT=15s \
     PATH="/opt/puppetlabs/puppet/bin:$PATH" \
     container=docker \
     LANG=en_US.utf8 \
@@ -82,11 +82,7 @@ RUN chmod +x /docker-entrypoint.sh \
 #             for myhost in ${arrHosts[@]}; do \
 #               myhost=(${myhost//:/ }); \
 #               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
-#             done \
-#             && puppet agent -t -v \
-#                   --environment=${PUPPETENV} \
-#                   --server=${PUPPETSERVER} \
-#                   --waitforcert=${WAITFORCERT}
+#             done
 
 ## Save the important stuff!
 VOLUME ["/etc/puppetlabs", \

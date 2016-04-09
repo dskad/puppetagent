@@ -13,7 +13,7 @@ if [ $1 = "/usr/sbin/init" ]; then
   ## Only initalize and setup the environments (via r10k) if server is launching
   ##    for the first time (i.e. new server container). We don't want to unintentionally
   ##    upgrade an environment or break certs on a container restart or upgrade.
-  # if [ ! -d  /etc/puppetlabs/puppet/ssl ]; then
+  if [ ! -d  /etc/puppetlabs/puppet/ssl ]; then
     # Generate CA certificate
     # puppet cert list -a -v
 
@@ -25,9 +25,9 @@ if [ $1 = "/usr/sbin/init" ]; then
     # puppet cert generate $(facter fqdn) --dns_alt_names=${DNSALTNAMES},$(facter hostname) -v
 
     # Apply inital config on startup.
-    # puppet agent -t -v --environment=${BOOTSTRAPENV} \
-    #         --server=${PUPPETSERVER} \
-    #         --waitforcert=${WAITFORCERT}
+    puppet agent -t -v --environment=${BOOTSTRAPENV} \
+            --server=${PUPPETSERVER} \
+            --waitforcert=${WAITFORCERT}
   # else
     # TODO fix the supervisor provider to allow confdir location paramaters
 
