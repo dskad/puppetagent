@@ -19,7 +19,7 @@ ENV BOOTSTRAPENV=bootstrap_sysd \
     PATH="/opt/puppetlabs/puppet/bin:$PATH" \
     container=docker \
     LANG=en_US.utf8 \
-    TERM=linux \
+    TERM=linux
 
 ## Add puppet PC1 repo, install puppet agent and clear ssl folder (to be regenerated in container)
 ## Note: Puppetserver creates the user and group puppet and drops the running server to these permissions
