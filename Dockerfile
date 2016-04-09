@@ -73,20 +73,20 @@ RUN chmod +x /docker-entrypoint.sh \
 ## to identify and authenticate itself with the server. Those certs use the hostname
 ## of the container when it first runs, so the honame of the container has to stay
 ## the same as build time.
-ONBUILD ARG HOSTNAME=puppetagent.example.com
-ONBUILD ARG HOSTS="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
-ONBUILD ARG PUPPETSERVER=puppet
-ONBUILD ARG PUPPETENV=production
-ONBUILD ARG WAITFORCERT=15s
-ONBUILD RUN arrHosts=(${HOSTS}); \
-            for myhost in ${arrHosts[@]}; do \
-              myhost=(${myhost//:/ }); \
-              printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
-            done \
-            && puppet agent -t -v \
-                  --environment=${PUPPETENV} \
-                  --server=${PUPPETSERVER} \
-                  --waitforcert=${WAITFORCERT}
+# ONBUILD ARG HOSTNAME=puppetagent.example.com
+# ONBUILD ARG HOSTS="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
+# ONBUILD ARG PUPPETSERVER=puppet
+# ONBUILD ARG PUPPETENV=production
+# ONBUILD ARG WAITFORCERT=15s
+# ONBUILD RUN arrHosts=(${HOSTS}); \
+#             for myhost in ${arrHosts[@]}; do \
+#               myhost=(${myhost//:/ }); \
+#               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
+#             done \
+#             && puppet agent -t -v \
+#                   --environment=${PUPPETENV} \
+#                   --server=${PUPPETSERVER} \
+#                   --waitforcert=${WAITFORCERT}
 
 ## Save the important stuff!
 VOLUME ["/etc/puppetlabs", \
