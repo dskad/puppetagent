@@ -18,7 +18,7 @@ ENV BOOTSTRAPENV=bootstrap_sysd \
     WAITFORCERT=$WAITFORCERT \
     PATH="/opt/puppetlabs/puppet/bin:$PATH" \
     container=docker \
-    LANG=en_US.utf8
+    LANG=en_US.utf8 \
     TERM=linux \
 
 ## Add puppet PC1 repo, install puppet agent and clear ssl folder (to be regenerated in container)
