@@ -85,9 +85,9 @@ RUN chmod +x /docker-entrypoint.sh \
 #             done
 
 ## Save the important stuff!
-VOLUME ["/etc/puppetlabs", \
-        "/opt/puppetlabs/puppet/cache", \
-        "/var/log/puppetlabs"]
+# VOLUME ["/etc/puppetlabs", \
+#         "/opt/puppetlabs/puppet/cache", \
+#         "/var/log/puppetlabs"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/init"]
