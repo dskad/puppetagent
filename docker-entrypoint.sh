@@ -8,8 +8,8 @@ if [ $1 = "/usr/sbin/init" ]; then
   ## Create /var/run/puppetlabs directory as this will go missing since we are mounting tmpfs here
   ## Puppetserver startup doesn't recreate this directory
   ## https://tickets.puppetlabs.com/browse/SERVER-441
-  mkdir -p /run/puppetlabs
-
+  #mkdir -p /run/puppetlabs
+  :
   ## Only initalize and setup the environments (via r10k) if server is launching
   ##    for the first time (i.e. new server container). We don't want to unintentionally
   ##    upgrade an environment or break certs on a container restart or upgrade.

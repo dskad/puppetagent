@@ -13,10 +13,7 @@ ARG PUPPETAGENT_VERSION
 # ARG PUPPETAGENT_VERSION="1.2.6"
 
 # Persist variables into child images
-ENV PUPPETENV=production \
-    PUPPETSERVER=puppet \
-    WAITFORCERT=15s \
-    PATH="/opt/puppetlabs/puppet/bin:$PATH" \
+ENV PATH="/opt/puppetlabs/puppet/bin:$PATH" \
     container=docker \
     LANG=en_US.utf8 \
     TERM=linux
@@ -39,7 +36,6 @@ RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
     && yum -y install \
         bash-completion \
         ca-certificates \
-        git \
         less \
         which \
     && yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} \
@@ -74,20 +70,24 @@ RUN chmod +x /docker-entrypoint.sh \
 ## of the container when it first runs, so the honame of the container has to stay
 ## the same as build time.
 # ONBUILD ARG HOSTNAME=puppetagent.example.com
-# ONBUILD ARG HOSTS="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
-# ONBUILD ARG PUPPETSERVER=puppet
-# ONBUILD ARG PUPPETENV=production
-# ONBUILD ARG WAITFORCERT=15s
-# ONBUILD RUN arrHosts=(${HOSTS}); \
-#             for myhost in ${arrHosts[@]}; do \
-#               myhost=(${myhost//:/ }); \
-#               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
-#             done
+ONBUILD ARG HOSTS="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
+ONBUILD ARG PUPPETSERVER=puppet
+ONBUILD ARG PUPPETENV=bootstrap
+ONBUILD ARG WAITFORCERT=15s
+ONBUILD ARG CERTNAME=test.example.com
+ONBUILD RUN arrHosts=(${HOSTS}); \
+            for myhost in ${arrHosts[@]}; do \
+              myhost=(${myhost//:/ }); \
+              printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
+            done \
+            && puppet agent --verbose --no-daemonize --onetime \
+                --certname ${CERTNAME}\
+                --environment=${PUPPETENV} \
+                --server=${PUPPETSERVER} \
+                --waitforcert=${WAITFORCERT} \
+            && rm -rf /opt/puppetlabs/puppet/cache && rm -rf /etc/puppetlabs/puppet/ssl
 
-## Save the important stuff!
-# VOLUME ["/etc/puppetlabs", \
-#         "/opt/puppetlabs/puppet/cache", \
-#         "/var/log/puppetlabs"]
+
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/init"]
