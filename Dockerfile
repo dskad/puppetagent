@@ -85,7 +85,8 @@ ONBUILD RUN arrHosts=(${HOSTS}); \
                 --environment=${PUPPETENV} \
                 --server=${PUPPETSERVER} \
                 --waitforcert=${WAITFORCERT} \
-            && rm -rf /opt/puppetlabs/puppet/cache && rm -rf /etc/puppetlabs/puppet/ssl
+            && rm -rf /opt/puppetlabs/puppet/cache \
+            && rm -rf /etc/puppetlabs/puppet/ssl
 
 
 
