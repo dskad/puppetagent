@@ -74,14 +74,14 @@ ONBUILD ARG HOSTS="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
 ONBUILD ARG PUPPETSERVER=puppet
 ONBUILD ARG PUPPETENV=bootstrap
 ONBUILD ARG WAITFORCERT=15s
-ONBUILD ARG CERTNAME=test.example.com
+ONBUILD ARG BUILDNAME=test
 ONBUILD RUN arrHosts=(${HOSTS}); \
             for myhost in ${arrHosts[@]}; do \
               myhost=(${myhost//:/ }); \
               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
             done \
             && puppet agent --verbose --no-daemonize --onetime \
-                --certname ${CERTNAME}\
+                --certname ${BUILDNAME}-`date +%s | sha256sum | head -c 3; echo `\
                 --environment=${PUPPETENV} \
                 --server=${PUPPETSERVER} \
                 --waitforcert=${WAITFORCERT} \
