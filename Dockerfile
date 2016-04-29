@@ -65,7 +65,7 @@ RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 COPY journal-console.service /usr/lib/systemd/system/journal-console.service
 COPY quiet-console.conf /etc/systemd/system.conf.d/quiet-console.conf
 COPY puppet.conf /etc/puppetlabs/puppet/puppet.conf
-# COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chmod +x /docker-entrypoint.sh \
     && systemctl enable puppet.service \
@@ -110,5 +110,5 @@ ONBUILD RUN arrHosts=(${HOSTS}); \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
 
-# ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/init"]
