@@ -81,7 +81,7 @@ RUN chmod +x /docker-entrypoint.sh \
 ## of the container when it first runs, so the honame of the container has to stay
 ## the same as build time.
 # ONBUILD ARG HOSTNAME=puppetagent.example.com
-ONBUILD ARG HOSTSFILE="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
+ONBUILD ARG BUILDHOSTSFILE="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
 ONBUILD ARG PUPPETSERVER=puppet
 ONBUILD ARG PUPPETENV=bootstrap
 ONBUILD ARG RUNINTERVAL=5m
@@ -91,7 +91,7 @@ ONBUILD ARG DNSALTNAMES="test,test.example.com"
 ONBUILD ARG PUPPET_EXTRA_OPTS
 ONBUILD ARG MCO_DAEMON_OPTS
 ONBUILD ARG PXP_AGENT_OPTIONS
-ONBUILD RUN arrHosts=(${HOSTS}); \
+ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             for myhost in ${arrHosts[@]}; do \
               myhost=(${myhost//:/ }); \
               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
