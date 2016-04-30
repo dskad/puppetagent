@@ -100,14 +100,14 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             && sed -i "s/puppetservername/${PUPPETSERVER}/" /etc/puppetlabs/puppet/puppet.conf \
             && sed -i "s/production/${PUPPETENV}/" /etc/puppetlabs/puppet/puppet.conf \
             && sed -i "s/5m/${RUNINTERVAL}/" /etc/puppetlabs/puppet/puppet.conf \
-            && sed -i "s/15s/${WAITFORCERT}/" /etc/puppetlabs/puppet/puppet.conf \
             && [ ! -v PUPPET_EXTRA_OPTS ] || echo PUPPET_EXTRA_OPTS=${PUPPET_EXTRA_OPTS} >> /etc/sysconfig/puppet \
             && [ ! -v MCO_DAEMON_OPTS ] || echo MCO_DAEMON_OPTS=${MCO_DAEMON_OPTS} >> /etc/sysconfig/mcollective \
             && [ ! -v PXP_AGENT_OPTIONS ] || echo PXP_AGENT_OPTIONS=${PXP_AGENT_OPTIONS} >> /etc/sysconfig/pxp-agent \
             && puppet agent --verbose --no-daemonize --onetime \
                 # --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
                 --certname ${BUILDCERTNAME} \
-                --dns_alt_names=${DNSALTNAMES} \
+                --dns_alt_names ${DNSALTNAMES} \
+                --waitforcert ${WAITFORCERT} \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
 
