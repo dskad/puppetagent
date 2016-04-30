@@ -105,7 +105,7 @@ ONBUILD RUN arrHosts=(${HOSTS}); \
             && [ ! -v PXP_AGENT_OPTIONS ] || echo PXP_AGENT_OPTIONS=${PXP_AGENT_OPTIONS} >> /etc/sysconfig/pxp-agent \
             && puppet agent --verbose --no-daemonize --onetime \
                 # --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
-                --certname ${BUILDCERTNAME}
+                --certname ${BUILDCERTNAME} \
                 --dns_alt_names=${DNSALTNAMES} \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
