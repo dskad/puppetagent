@@ -8,8 +8,8 @@ if [ $1 = "/usr/sbin/init" ]; then
   ## Create /var/run/puppetlabs directory as this will go missing since we are mounting tmpfs here
   ## Puppetserver startup doesn't recreate this directory
   ## https://tickets.puppetlabs.com/browse/SERVER-441
-  #mkdir -p /run/puppetlabs
-  :
+  mkdir -p /run/puppetlabs
+
   ## Only initalize and setup the environments (via r10k) if server is launching
   ##    for the first time (i.e. new server container). We don't want to unintentionally
   ##    upgrade an environment or break certs on a container restart or upgrade.
@@ -43,6 +43,13 @@ if [ $1 = "/usr/sbin/init" ]; then
     # /etc/puppetlabs/code/environments/${currrent_env}/manifests/site.pp
   # fi
 fi
+
+puppet config set server ${PUPPETSERVER} --section main
+puppet config set environment ${PUPPETENV} --section main
+puppet config set runinterval ${RUNINTERVAL} --section agent
+puppet config set waitforcert ${WAITFORCERT} --section agent
+puppet config set dns_alt_names ${DNSALTNAMES} --section main
+puppet config set trusted_server_facts true --section main
 
 ## Pass control on to the command suppled on the CMD line of the Dockerfile
 ## This makes init PID 1
