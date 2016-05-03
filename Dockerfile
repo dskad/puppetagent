@@ -75,11 +75,6 @@ RUN systemctl enable \
 ##  apply the configuration during the build process. Using puppet to finish building
 ##  the image
 
-DNSALTNAMES="puppet,puppet.example.com" \
-PUPPETSERVER=puppet \
-PUPPETENV=bootstrap \
-RUNINTERVAL=5m \
-WAITFORCERT=15s \
 ## Set container hostname and puppetserver address. Puppet uses signed certificates
 ##  to identify and authenticate itself with the server. Those certs use the hostname
 ##  of the container when it first runs, so the hostname of the running container has to stay
