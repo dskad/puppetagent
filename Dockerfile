@@ -83,15 +83,12 @@ RUN systemctl enable \
 ONBUILD ARG BUILDHOSTSFILE="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
 ONBUILD ARG PUPPETSERVER=puppet
 ONBUILD ARG PUPPETENV=bootstrap
-ONBUILD ARG RUNINTERVAL=5m
-ONBUILD ARG WAITFORCERT=15s
+ONBUILD ARG WAITFORCERT=2m
 ONBUILD ARG BUILDCERTNAME=test
-ONBUILD ARG DNSALTNAMES="test,test.example.com"
 ONBUILD ENV PUPPETSERVER=$PUPPETSERVER \
-            PUPPETENV=$PUPPETENV  \
-            RUNINTERVAL=$RUNINTERVAL  \
-            WAITFORCERT=$WAITFORCERT  \
-            DNSALTNAMES=$DNSALTNAMES
+            PUPPETENV=$PUPPETENV \
+            RUNINTERVAL=30m \
+            WAITFORCERT=$WAITFORCERT
 ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             for myhost in ${arrHosts[@]}; do \
               myhost=(${myhost//:/ }); \
@@ -105,7 +102,6 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             && puppet agent --verbose --no-daemonize --onetime \
                 # --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
                 --certname ${BUILDCERTNAME} \
-                --dns_alt_names ${DNSALTNAMES} \
                 --waitforcert ${WAITFORCERT} \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
