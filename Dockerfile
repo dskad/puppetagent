@@ -106,5 +106,11 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
 
+ONBUILD VOLUME ["/sys/fs/cgroup", \
+                "/etc/puppetlabs", \
+                "/opt/puppetlabs/puppet/cache", \
+                "/opt/puppetlabs/server/data", \
+                "/var/log/puppetlabs", ]
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/init"]
