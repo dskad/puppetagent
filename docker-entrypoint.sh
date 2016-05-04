@@ -48,7 +48,6 @@ puppet config set server ${PUPPETSERVER} --section main
 puppet config set environment ${PUPPETENV} --section main
 puppet config set runinterval ${RUNINTERVAL} --section agent
 puppet config set waitforcert ${WAITFORCERT} --section agent
-puppet config set dns_alt_names ${DNSALTNAMES} --section main
 puppet config set trusted_server_facts true --section main
 
 ## Pass control on to the command suppled on the CMD line of the Dockerfile
