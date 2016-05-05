@@ -86,8 +86,7 @@ ONBUILD ARG BUILDCERTNAME=test
 ONBUILD ENV PUPPETSERVER=puppet \
             PUPPETENV=production \
             RUNINTERVAL=30m \
-            WAITFORCERT=2m \
-            DNSALTNAMES
+            WAITFORCERT=2m
 ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             for myhost in ${arrHosts[@]}; do \
               myhost=(${myhost//:/ }); \
