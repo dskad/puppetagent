@@ -64,8 +64,6 @@ COPY quiet-console.conf /etc/systemd/system.conf.d/quiet-console.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# COPY puppet.conf /etc/puppetlabs/puppet/puppet.conf
-
 ## Enable services
 RUN systemctl enable \
       puppet.service \
@@ -81,14 +79,15 @@ RUN systemctl enable \
 ##  the same as build time.
 # ONBUILD ARG HOSTNAME=puppetagent.example.com
 ONBUILD ARG BUILDHOSTSFILE="puppet.example.com:192.168.10.50 puppet:192.168.10.50"
-ONBUILD ARG PUPPETSERVER=puppet
-ONBUILD ARG PUPPETENV=bootstrap
-ONBUILD ARG WAITFORCERT=2m
+ONBUILD ARG BUILDSERVER=puppet
+ONBUILD ARG BUILDENV=bootstrap
+ONBUILD ARG BUILDWAITFORCERT=2m
 ONBUILD ARG BUILDCERTNAME=test
-ONBUILD ENV PUPPETSERVER=$PUPPETSERVER \
-            PUPPETENV=$PUPPETENV \
+ONBUILD ENV PUPPETSERVER=puppet \
+            PUPPETENV=production \
             RUNINTERVAL=30m \
-            WAITFORCERT=$WAITFORCERT
+            WAITFORCERT=2m \
+            DNSALTNAMES
 ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             for myhost in ${arrHosts[@]}; do \
               myhost=(${myhost//:/ }); \
@@ -102,15 +101,21 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             && puppet agent --verbose --no-daemonize --onetime \
                 # --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
                 --certname ${BUILDCERTNAME} \
-                --waitforcert ${WAITFORCERT} \
+                --waitforcert ${BUILDWAITFORCERT} \
+                --environment ${BUILDENV} \
+                --server ${BUILDSERVER} \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
 
-ONBUILD VOLUME ["/sys/fs/cgroup", \
-                "/etc/puppetlabs", \
-                "/opt/puppetlabs/puppet/cache", \
-                "/opt/puppetlabs/server/data", \
-                "/var/log/puppetlabs", ]
+ONBUILD VOLUME /sys/fs/cgroup
+
+## Additionally these volumes for the puppet agent should be added to the derived
+##   image dockerfile to save the agent state and certs. Onbuld runs before the child
+##   docker file, so any changes to the volums after the are declaired would be lost.
+##   Therefore, they need to be declaired at the end of the child dockerfile.
+##     "/etc/puppetlabs"
+##     "/opt/puppetlabs/puppet/cache"
+##     "/var/log/puppetlabs"
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/init"]
