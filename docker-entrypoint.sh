@@ -1,6 +1,6 @@
 #!/bin/bash
 ## unoficial "strict mode" http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -xeuo pipefail
 IFS=$'\n\t'
 echo $1
 # This section runs before supervisor and is good for initalization or pre-startup tasks
