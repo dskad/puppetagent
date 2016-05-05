@@ -42,18 +42,17 @@ if [ $1 = "/usr/sbin/init" ]; then
     # puppet apply --environment=${currrent_env} \
     # /etc/puppetlabs/code/environments/${currrent_env}/manifests/site.pp
   # fi
-fi
 
-## Set puppet.conf settings
-puppet config set runinterval ${RUNINTERVAL} --section agent --environment production
-puppet config set waitforcert ${WAITFORCERT} --section agent --environment production
-puppet config set server ${PUPPETSERVER} --section main --environment production
-puppet config set trusted_server_facts true --section main --environment production
-if [ -v DNSALTNAMES ]; then
-  puppet config set dns_alt_names ${DNSALTNAMES} --section main  --environment production
+  ## Set puppet.conf settings
+  puppet config set runinterval ${RUNINTERVAL} --section agent --environment production
+  puppet config set waitforcert ${WAITFORCERT} --section agent --environment production
+  puppet config set server ${PUPPETSERVER} --section main --environment production
+  puppet config set trusted_server_facts true --section main --environment production
+  if [ -v DNSALTNAMES ]; then
+    puppet config set dns_alt_names ${DNSALTNAMES} --section main  --environment production
+  fi
+  puppet config set environment ${PUPPETENV} --section main --environment production
 fi
-puppet config set environment ${PUPPETENV} --section main --environment production
-
 
 ## Pass control on to the command suppled on the CMD line of the Dockerfile
 ## This makes init PID 1
