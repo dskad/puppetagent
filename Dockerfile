@@ -38,7 +38,7 @@ RUN yum -y install \
     less \
     logrotate \
     which \
-  ## puppetserver depends on which, so we need to install it as a separate command
+  ## puppet depends on which, so we need to install it with a separate yum command
   && yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} \
   && yum clean all
 
@@ -70,7 +70,7 @@ RUN systemctl enable \
       journal-console.service
 
 ## This ONBUILD section will cause a derived image to contact the puppet server and
-##  apply the configuration during the build process. Using puppet to finish building
+##  apply the configuration during the build process, using puppet to finish building
 ##  the image
 
 ## Set container hostname and puppetserver address. Puppet uses signed certificates
@@ -92,11 +92,6 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
               myhost=(${myhost//:/ }); \
               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
             done \
-            ## Set puppet.conf settings
-            # && sed -i "s/puppetservername/${PUPPETSERVER}/" /etc/puppetlabs/puppet/puppet.conf \
-            # && sed -i "s/production/${PUPPETENV}/" /etc/puppetlabs/puppet/puppet.conf \
-            # && sed -i "s/5m/${RUNINTERVAL}/" /etc/puppetlabs/puppet/puppet.conf \
-            # && [ ! -v PXP_AGENT_OPTIONS ] || echo PXP_AGENT_OPTIONS=${PXP_AGENT_OPTIONS} >> /etc/sysconfig/pxp-agent \
             && puppet agent --verbose --no-daemonize --onetime \
                 # --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
                 --certname ${BUILDCERTNAME} \
@@ -110,11 +105,11 @@ ONBUILD VOLUME /sys/fs/cgroup
 
 ## Additionally these volumes for the puppet agent should be added to the derived
 ##   image dockerfile to save the agent state and certs. Onbuld runs before the child
-##   docker file, so any changes to the volums after the are declaired would be lost.
-##   Therefore, they need to be declaired at the end of the child dockerfile.
-##     "/etc/puppetlabs"
-##     "/opt/puppetlabs/puppet/cache"
-##     "/var/log/puppetlabs"
+##   docker file, so any changes to the volumes after they are declared would be lost.
+##   Therefore, they need to be declared at the end of the child dockerfile.
+##     VOLUME /etc/puppetlabs
+##     VOLUME /opt/puppetlabs/puppet/cache
+##     VOLUME /var/log/puppetlabs
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/init"]

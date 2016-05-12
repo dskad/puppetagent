@@ -25,7 +25,8 @@ if [ $1 = "/usr/sbin/init" ]; then
     # puppet cert generate $(facter fqdn) --dns_alt_names=${DNSALTNAMES},$(facter hostname) -v
 
     # Apply inital config on startup.
-    # puppet agent -t -v --environment=${PUPPETENV} \
+    # puppet agent --verbose --no-daemonize --onetime \
+    #         --environment=${PUPPETENV} \
     #         --server=${PUPPETSERVER} \
     #         --waitforcert=${WAITFORCERT}
   # else
