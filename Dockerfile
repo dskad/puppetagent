@@ -7,7 +7,7 @@ ARG PUPPETAGENT_VERSION
 # ARG PUPPETAGENT_VERSION="1.2.*"
 # ARG PUPPETAGENT_VERSION="1.2.6"
 
-ENV PATH="/opt/puppetlabs/puppet/bin:$PATH" \
+ENV PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH" \
     container=docker \
     LANG=en_US.utf8 \
     TERM=linux
