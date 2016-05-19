@@ -1,8 +1,11 @@
 #!/bin/bash
 ## unoficial "strict mode" http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -xeuo pipefail
+set -euo pipefail
+if [ -v DEBUG ]; then
+  set -x
+fi
 IFS=$'\n\t'
-echo $1
+
 # This section runs before supervisor and is good for initalization or pre-startup tasks
 if [ $1 = "/usr/sbin/init" ]; then
   ## Create /var/run/puppetlabs directory as this will go missing since we are mounting tmpfs here
