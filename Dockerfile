@@ -93,8 +93,8 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
               printf "%s\t%s\n" ${myhost[1]} ${myhost[0]} >> /etc/hosts; \
             done \
             && puppet agent --verbose --no-daemonize --onetime \
-                # --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
-                --certname ${BUILDCERTNAME} \
+                --certname ${BUILDCERTNAME}-`date +%s | sha256sum | head -c 3; echo ` \
+                # --certname ${BUILDCERTNAME} \
                 --waitforcert ${BUILDWAITFORCERT} \
                 --environment ${BUILDENV} \
                 --server ${BUILDSERVER} \
