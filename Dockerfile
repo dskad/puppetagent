@@ -66,8 +66,8 @@ RUN chmod +x /docker-entrypoint.sh
 
 ## Enable services
 RUN systemctl enable \
-      puppet.service \
-      journal-console.service
+    puppet.service \
+    journal-console.service
 
 ## This ONBUILD section will cause a derived image to contact the puppet server and
 ##  apply the configuration during the build process, using puppet to finish building
