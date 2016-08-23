@@ -42,32 +42,8 @@ RUN yum -y install \
   && yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} \
   && yum clean all
 
-## Clean up systemd folders to allow it to run in a container
-## https://hub.docker.com/_/centos/
-## Note: this needs to run after "yum update". If there is an upgrade to systemd/dbus
-##      these files will get restored
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; \
-        do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; \
-       done); \
-    rm -f /lib/systemd/system/multi-user.target.wants/*;\
-    rm -f /etc/systemd/system/*.wants/*;\
-    rm -f /lib/systemd/system/local-fs.target.wants/*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*;\
-    rm -f /lib/systemd/system/anaconda.target.wants/*;
-
-## Files to send journal logs to stdout for docker logs
-COPY journal-console.service /usr/lib/systemd/system/journal-console.service
-COPY quiet-console.conf /etc/systemd/system.conf.d/quiet-console.conf
-
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-
-## Enable services
-RUN systemctl enable \
-    puppet.service \
-    journal-console.service
 
 ## This ONBUILD section will cause a derived image to contact the puppet server and
 ##  apply the configuration during the build process, using puppet to finish building
@@ -101,7 +77,6 @@ ONBUILD RUN arrHosts=(${BUILDHOSTSFILE}); \
             && rm -rf /opt/puppetlabs/puppet/cache \
             && rm -rf /etc/puppetlabs/puppet/ssl
 
-ONBUILD VOLUME /sys/fs/cgroup
 
 ## Additionally these volumes for the puppet agent should be added to the derived
 ##   image dockerfile to save the agent state and certs. Onbuld runs before the child
@@ -111,5 +86,5 @@ ONBUILD VOLUME /sys/fs/cgroup
 ##     VOLUME /opt/puppetlabs/puppet/cache
 ##     VOLUME /var/log/puppetlabs
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/usr/sbin/init"]
+# ENTRYPOINT ["/docker-entrypoint.sh"]
+# CMD ["/usr/bin/bash"]
