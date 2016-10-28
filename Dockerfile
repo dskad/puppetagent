@@ -38,7 +38,9 @@ RUN yum -y install \
     which \
   ## puppet depends on which, so we need to install it with a separate yum command
   && yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} \
-  && yum clean all
+  && yum clean all \
+  ## Add default config for container based puppet agent
+  && echo environment=puppet >> /etc/puppetlabs/puppet/puppet.conf \
+  && echo tags=puppet >> /etc/puppetlabs/puppet/puppet.conf
 
-# ENTRYPOINT ["/docker-entrypoint.sh"]
-# CMD ["/usr/bin/bash"]
+CMD ["/usr/bin/bash"]
