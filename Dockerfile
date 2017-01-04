@@ -12,7 +12,7 @@ RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ## Import repository keys
 RUN rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7 \
   --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
-  --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+  --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
 
 ## Latest by default, uncomment to pin specific versions or supply with --build-arg PUPPETAGENT_VERSION
 ## Requires docker-engine >= 1.9
