@@ -27,15 +27,15 @@ ARG PUPPETAGENT_VERSION
 ##          /opt/puppetlabs/puppet/cache
 ##          /etc/puppetlabs/puppet/ssl
 RUN yum -y install \
-      https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm && \
-    epel-release && \
+      https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm \
+      epel-release && \
     yum -y update && \
-    yum -y install && \
-    bash-completion && \
-    ca-certificates && \
-    less && \
-    logrotate && \
-    which && \
+    yum -y install \
+      bash-completion \
+      ca-certificates \
+      less \
+      logrotate \
+      which && \
 
     ## puppet depends on which, so we need to install it with a separate yum command
     yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} && \
