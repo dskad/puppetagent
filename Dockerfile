@@ -26,8 +26,8 @@ ARG PUPPETAGENT_VERSION
 ##          /run/puppetlabs
 ##          /opt/puppetlabs/puppet/cache
 ##          /etc/puppetlabs/puppet/ssl
-RUN yum -y install && \
-    https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm && \
+RUN yum -y install \
+      https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm && \
     epel-release && \
     yum -y update && \
     yum -y install && \
