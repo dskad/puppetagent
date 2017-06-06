@@ -27,18 +27,17 @@ RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ##          /run/puppetlabs
 ##          /opt/puppetlabs/puppet/cache
 ##          /etc/puppetlabs/puppet/ssl
-  rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
-
-RUN yum -y update && \
-    yum -y install \
-      bash-completion \
-      ca-certificates \
-      less \
-      logrotate \
-      which && \
+  rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm && \
+  yum -y update && \
+  yum -y install \
+    bash-completion \
+    ca-certificates \
+    less \
+    logrotate \
+    which && \
 
     ## puppet depends on which, so we need to install it with a separate yum command
-    yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} && \
-    yum clean all
+  yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} && \
+  yum clean all
 
 CMD ["/usr/bin/bash"]
