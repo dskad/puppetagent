@@ -9,16 +9,16 @@ ENV PATH="/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH" \
 ## Latest by default, uncomment to pin specific versions or supply with --build-arg PUPPETAGENT_VERSION
 ## Requires docker-engine >= 1.9
 ARG PUPPETAGENT_VERSION
-# ARG PUPPETAGENT_VERSION="1.2.*"
-# ARG PUPPETAGENT_VERSION="1.2.6"
+# ARG PUPPETAGENT_VERSION="1.10.*"
+# ARG PUPPETAGENT_VERSION="1.10.1"
 
 ## Set locale to en_US.UTF-8 prevent odd puppet errors in containers
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
 
 ## Import repository keys
   rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7 \
-        --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
-        --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && \
+      --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
+      --import https://yum.puppetlabs.com/RPM-GPG-KEY-puppet && \
 
 
 ## Add puppet PC1 repo, install puppet agent and support tool
@@ -38,6 +38,10 @@ RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
     ## puppet depends on which, so we need to install it with a separate yum command
   yum -y install puppet-agent${PUPPETAGENT_VERSION:+-}${PUPPETAGENT_VERSION} && \
+
+  # Make environment use hiera v5 layout
+  rm -f /etc/puppetlabs/puppet/hiera.yaml && \
+
   yum clean all
 
 CMD ["/usr/bin/bash"]
