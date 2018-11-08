@@ -8,7 +8,7 @@ ARG PUPPETAGENT_VERSION
 # ARG PUPPETAGENT_VERSION="1.10.1"
 
 ## Current available releases: puppet5, puppet5-nightly, puppet6, puppet6-nightly
-ENV PUPPET_RELEASE="puppet6"
+ARG PUPPET_RELEASE="puppet6"
 
 RUN set -eo pipefail && if [[ -v DEBUG ]]; then set -x; fi && \
   # Import repository keys and add puppet repository
